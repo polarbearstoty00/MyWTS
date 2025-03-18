@@ -71,16 +71,9 @@ def get_account_summary(access_token):
     })
     
     response = requests.post(STOCK_ACCNO_URL, headers=headers, data=body)
+    account_summary_json = response.json()
 
-    # 응답 JSON 출력
-    try:
-        account_summary_json = response.json()
-        st.write("응답 데이터:", account_summary_json)  # Streamlit UI에서 응답 데이터 확인
-
-        if "CSPAQ12200OutBlock1" in account_summary_json and "CSPAQ12200OutBlock2" in account_summary_json:
-            return account_summary_json["CSPAQ12200OutBlock1"], account_summary_json["CSPAQ12200OutBlock2"]
-        else:
-            raise Exception("계좌 요약 정보를 찾을 수 없습니다.")
-
-    except json.JSONDecodeError:
-        raise Exception(f"JSON 디코딩 오류 발생: {response.text}")
+    if "CSPAQ12200OutBlock1" in account_summary_json and "CSPAQ12200OutBlock2" in account_summary_json:
+        return account_summary_json["CSPAQ12200OutBlock1"], account_summary_json["CSPAQ12200OutBlock2"]
+    else:
+        raise Exception("계좌 요약 정보를 찾을 수 없습니다.")
