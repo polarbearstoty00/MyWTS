@@ -31,13 +31,13 @@ if st.session_state["page"] == "main":
     st.title("WTS 메인 페이지")
     st.subheader("계좌 잔고")
     
-    balance_data = get_account_balance(st.session_state["access_token"])
-    if balance_data.get("rsp_cd") == "00000":
-        st.json(balance_data["t0424OutBlock"])
+    try:
+        balance_summary, balance_details = get_account_balance(st.session_state["access_token"])
+        st.json(balance_summary)
         st.write("보유 종목 내역")
-        st.json(balance_data["t0424OutBlock1"])
-    else:
-        st.error(f"잔고 조회 실패: {balance_data.get('rsp_msg', '알 수 없는 오류')}")
+        st.json(balance_details)
+    except Exception as e:
+        st.error(f"잔고 조회 실패: {str(e)}")
     
     if st.button("로그아웃"):
         st.session_state.clear()
