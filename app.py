@@ -4,6 +4,7 @@ import json
 import pandas as pd
 from auth_01 import get_access_token
 from auth_01 import get_account_balance
+from auth_01 import get_account_summary
 
 # 페이지 상태 초기화
 if "page" not in st.session_state:
