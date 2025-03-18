@@ -43,6 +43,15 @@ if st.session_state["page"] == "main":
             df = df[["janqty", "sunikrt", "appamt", "dtsunik", "price", "pamt", "mamt", "fee", "tax"]]  # 평가금액과 평가손익만 표시
             df = df.rename(columns={"janqty" : "잔고수량", "sunikrt" : "수익률", "appamt": "평가금액", "dtsunik": "평가손익", "price" : "현재가",
                                    "pamt" : "평균단가", "mamt" : "매입금액", "fee" : "수수료", "tax" : "제세금"})  # 컬럼명 변경
+            # 화폐단위 적용
+            df["평가금액"] = df["평가금액"].apply(lambda x: f"{x:,.0f}")
+            df["평가손익"] = df["평가손익"].apply(lambda x: f"{x:,.0f}")
+            df["현재가"] = df["현재가"].apply(lambda x: f"{x:,.0f}")
+            df["평균단가"] = df["평균단가"].apply(lambda x: f"{x:,.0f}")
+            df["매입금액"] = df["매입금액"].apply(lambda x: f"{x:,.0f}")
+            df["수수료"] = df["수수료"].apply(lambda x: f"{x:,.0f}")
+            df["제세금"] = df["제세금"].apply(lambda x: f"{x:,.0f}")
+
             st.dataframe(df)
         else:
             st.write("보유 종목이 없습니다.")
