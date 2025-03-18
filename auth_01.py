@@ -42,6 +42,7 @@ def get_account_balance(access_token):
     })
     
     response = requests.post(STOCK_ACCNO_URL, headers=headers, data=body)
+    response.encoding = "utf-8"
     account_json = response.json()
     
     if "t0424OutBlock" in account_json and "t0424OutBlock1" in account_json:
