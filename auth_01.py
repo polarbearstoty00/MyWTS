@@ -20,3 +20,22 @@ def get_access_token(app_key, app_secret):
     token_json = response.json()
     
     return token_json.get("access_token"), token_json
+
+# LS증권 계좌 잔고 조회
+def get_account_balance(access_token):
+    headers = {
+        "Authorization": f"Bearer {access_token}",
+        "Content-Type": "application/json; charset=UTF-8"
+    }
+    data = {
+        "t0424InBlock": {
+            "prcgb": "",
+            "chegb": "",
+            "dangb": "",
+            "charge": "",
+            "cts_expcode": ""
+        }
+    }
+    
+    response = requests.post(STOCK_ACCNO_URL, headers=headers, json=data)
+    return response.json()
