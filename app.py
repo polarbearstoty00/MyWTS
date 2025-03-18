@@ -40,8 +40,9 @@ if st.session_state["page"] == "main":
         if balance_details:
             df = pd.DataFrame(balance_details)
             df = df.rename(columns={"hname": "종목명"}).set_index("종목명")  # 종목명을 인덱스로 설정
-            df = df[["sunikrt", "appamt", "dtsunik", ]]  # 평가금액과 평가손익만 표시
-            df = df.rename(columns={"sunikrt" : "수익률", "appamt": "평가금액", "dtsunik": "평가손익"})  # 컬럼명 변경
+            df = df[["janqty", "sunikrt", "appamt", "dtsunik", "price", "pamt", "mamt", "fee", "tax"]]  # 평가금액과 평가손익만 표시
+            df = df.rename(columns={"janqty" : "잔고수량", "sunikrt" : "수익률", "appamt": "평가금액", "dtsunik": "평가손익", "price" : "현재가",
+                                   "pamt" : "평균단가", "mamt" : "매입금액", "fee" : "수수료", "tax" : "제세금"})  # 컬럼명 변경
             st.dataframe(df)
         else:
             st.write("보유 종목이 없습니다.")
