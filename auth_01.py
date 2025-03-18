@@ -4,6 +4,8 @@ import json
 # LS증권 API 기본 정보
 BASE_URL = "https://openapi.ls-sec.co.kr:8080"
 TOKEN_URL = f"{BASE_URL}/oauth2/token"
+STOCK_ACCNO_URL = f"{BASE_URL}/stock/accno"
+STOCK_MARKET_DATA_URL = f"{BASE_URL}/stock/market-data"
 
 def get_access_token(app_key, app_secret):
     token_data = {
