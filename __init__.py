@@ -1,1 +1,1 @@
-from .auth_01 import get_access_token
+from auth_01 import get_access_token
