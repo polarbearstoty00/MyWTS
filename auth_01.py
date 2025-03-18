@@ -49,3 +49,33 @@ def get_account_balance(access_token):
         return account_json["t0424OutBlock"], account_json["t0424OutBlock1"]
     else:
         raise Exception("계좌 잔고 데이터를 찾을 수 없습니다.")
+
+# 계좌 전체 수익률, 예수금 등을 조회
+def get_account_summary(access_token):
+    headers = {
+        "Content-Type": "application/json; charset=UTF-8",
+        "Authorization": f"Bearer {access_token}",
+        "tr_cd": "CSPAQ12200",
+        "tr_cont": "N",
+        "tr_cont_key": ""
+    }
+    
+    body = json.dumps({
+        "CSPAQ12200InBlock1": {
+            "RecCnt": 1,
+            "AcntNo": "",
+            "Pwd": "",
+            "BalCreTp": "0",
+            "CmsnAppTpCode": "00000",
+            "D2balBaseQryTp": "0",
+            "UprcTpCode": "0"
+        }
+    })
+    
+    response = requests.post(STOCK_ACCNO_URL, headers=headers, data=body)
+    account_summary_json = response.json()
+    
+    if "CSPAQ12200OutBlock2" in account_summary_json:
+        return account_summary_json["CSPAQ12200OutBlock2"]
+    else:
+        raise Exception("계좌 요약 정보를 찾을 수 없습니다.")
