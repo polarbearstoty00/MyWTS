@@ -39,7 +39,7 @@ if st.session_state["page"] == "main":
         # 보유 종목을 표 형태로 변환하여 표시
         if balance_details:
             df = pd.DataFrame(balance_details)
-            st.DataFrame(df)
+            st.dataframe(df)
         else:
             st.write("보유 종목이 없습니다.")
     except Exception as e:
