@@ -38,6 +38,12 @@ if st.session_state["page"] == "main":
         account_summary = get_account_summary(st.session_state["access_token"])
     
         st.write("보유 종목 내역")
+
+        # 계좌 요약 정보 표시
+        if account_summary:
+            st.write(f"총 평가 금액: {account_summary['TotEvalAmt']:,}원")
+            st.write(f"예수금: {account_summary['Dps']:,}원")
+            st.write(f"총 손익률: {account_summary['EvluPflsRt']}%")
         
         # 보유 종목을 표 형태로 변환하여 표시
         if balance_details:
