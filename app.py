@@ -41,9 +41,9 @@ if st.session_state["page"] == "main":
 
         # 계좌 요약 정보 표시
         if account_summary:
-            st.write(f"총 평가 금액: {account_summary['TotEvalAmt']:,}원")
+            st.write(f"총 평가 금액: {account_summary['BalEvalAmt']:,}원")
             st.write(f"예수금: {account_summary['Dps']:,}원")
-            st.write(f"총 손익률: {account_summary['EvluPflsRt']}%")
+            st.write(f"총 손익률: {account_summary['PnlRat']}%")
         
         # 보유 종목을 표 형태로 변환하여 표시
         if balance_details:
