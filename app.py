@@ -35,7 +35,13 @@ if st.session_state["page"] == "main":
         balance_summary, balance_details = get_account_balance(st.session_state["access_token"])
         st.json(balance_summary)
         st.write("보유 종목 내역")
-        st.json(balance_details)
+        
+        # 보유 종목을 표 형태로 변환하여 표시
+        if balance_details:
+            df = pd.DataFrame(balance_details)
+            st.dataframe(df)
+        else:
+            st.write("보유 종목이 없습니다.")
     except Exception as e:
         st.error(f"잔고 조회 실패: {str(e)}")
     
