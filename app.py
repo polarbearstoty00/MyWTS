@@ -41,7 +41,7 @@ if st.session_state["page"] == "main":
             df = pd.DataFrame(balance_details)
             df = df.set_index("hname")  # 종목명을 인덱스로 설정
             df = df[["tappamt", "tdtsunik"]]  # 평가금액과 평가손익만 표시
-            df = df.rename(columns={"hname" : "종목명", "tappamt": "평가금액", "tdtsunik": "평가손익"})  # 컬럼명 변경
+            df = df.rename(columns={"tappamt": "평가금액", "tdtsunik": "평가손익"})  # 컬럼명 변경
             st.table(df)
         else:
             st.write("보유 종목이 없습니다.")
