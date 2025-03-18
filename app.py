@@ -35,16 +35,16 @@ if st.session_state["page"] == "main":
 
     # 계좌 요약 정보 출력
     try:
-        account_summary = get_account_summary(st.session_state["access_token"])
+        account_summary_summary, account_summary_details = get_account_summary(st.session_state["access_token"])
 
         st.write("계좌 요약 내역")
         
         # 계좌 요약 정보가 존재하면 표시
-        if account_summary:
+        if account_summary_details:
             st.write("### 계좌 요약 정보")
-            st.write(f"총 평가 금액: {account_summary['BalEvalAmt']:,}원")
-            st.write(f"예수금: {account_summary['Dps']:,}원")
-            st.write(f"총 손익률: {account_summary['PnlRat']}%")
+            st.write(f"총 평가 금액: {account_summary_details[0]['BalEvalAmt']:,}원")
+            st.write(f"예수금: {account_summary_details[0]['Dps']:,}원")
+            st.write(f"총 손익률: {account_summary_details[0]['PnlRat']}%")
     
     except Exception as e:
         st.warning(f"계좌 요약 조회 실패: {str(e)}")
