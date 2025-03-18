@@ -2,6 +2,7 @@ import streamlit as st
 import requests
 import json
 from auth_01 import get_access_token
+from auth_01 import get_account_balance
 
 # 페이지 상태 초기화
 if "page" not in st.session_state:
