@@ -64,16 +64,24 @@ def get_account_summary(access_token):
         "tr_cont_key": ""
     }
     
-    body = json.dumps({
+    body = {
         "CSPAQ12200InBlock1": {
-            "BalCreTp": "0"
+            "BalCreTp": "1"  # 요청값 수정
         }
-    })
+    }
     
-    response = requests.post(STOCK_ACCNO_URL, headers=headers, data=body)
-    account_summary_json = response.json()
+    st.write("📤 요청 데이터:", body)  # 요청 데이터 확인
+    
+    response = requests.post(STOCK_ACCNO_URL, headers=headers, json=body)
+    
+    try:
+        account_summary_json = response.json()
+        st.write("📥 응답 데이터:", account_summary_json)  # 응답 데이터 확인
 
-    if "CSPAQ12200OutBlock1" in account_summary_json and "CSPAQ12200OutBlock2" in account_summary_json:
-        return account_summary_json["CSPAQ12200OutBlock1"], account_summary_json["CSPAQ12200OutBlock2"]
-    else:
-        raise Exception("계좌 요약 정보를 찾을 수 없습니다.")
+        if "CSPAQ12200OutBlock2" in account_summary_json and len(account_summary_json["CSPAQ12200OutBlock2"]) > 0:
+            return account_summary_json["CSPAQ12200OutBlock2"][0]  # 첫 번째 데이터 반환
+        else:
+            raise Exception("계좌 요약 정보를 찾을 수 없습니다.")
+    
+    except json.JSONDecodeError:
+        raise Exception(f"JSON 디코딩 오류 발생: {response.text}")
