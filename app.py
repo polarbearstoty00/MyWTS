@@ -21,6 +21,7 @@ if st.session_state["page"] == "login":
                 st.success("로그인 성공! Access Token 발급 완료.")
                 st.session_state["access_token"] = access_token
                 st.session_state["page"] = "main"  # 메인 페이지로 이동
+                st.rerun() # 화면 갱신
             else:
                 st.error(f"로그인 실패: {response_json}")
         else:
