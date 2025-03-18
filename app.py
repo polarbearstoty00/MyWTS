@@ -34,6 +34,8 @@ if st.session_state["page"] == "main":
     
     try:
         balance_summary, balance_details = get_account_balance(st.session_state["access_token"])
+        account_summary = get_account_summary(st.session_state["access_token"])
+    
         st.write("보유 종목 내역")
         
         # 보유 종목을 표 형태로 변환하여 표시
