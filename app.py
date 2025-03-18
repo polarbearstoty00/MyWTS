@@ -3,24 +3,6 @@ import requests
 import json
 from auth_01 import get_access_token
 
-def get_account_balance(access_token):
-    headers = {
-        "Authorization": f"Bearer {access_token}",
-        "Content-Type": "application/json; charset=UTF-8"
-    }
-    data = {
-        "t0424InBlock": {
-            "prcgb": "",
-            "chegb": "",
-            "dangb": "",
-            "charge": "",
-            "cts_expcode": ""
-        }
-    }
-    
-    response = requests.post(STOCK_ACCNO_URL, headers=headers, json=data)
-    return response.json()
-
 # 페이지 상태 초기화
 if "page" not in st.session_state:
     st.session_state["page"] = "login"
