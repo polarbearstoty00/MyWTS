@@ -1,5 +1,6 @@
 import requests
 import json
+import streamlit as st
 
 # LS증권 API 기본 정보
 BASE_URL = "https://openapi.ls-sec.co.kr:8080"
