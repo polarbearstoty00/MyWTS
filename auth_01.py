@@ -26,6 +26,7 @@ def get_account_balance(access_token):
     headers = {
         "Authorization": f"Bearer {access_token}",
         "Content-Type": "application/json; charset=UTF-8"
+        "tr_cd": "t0424"
     }
     data = {
         "t0424InBlock": {
