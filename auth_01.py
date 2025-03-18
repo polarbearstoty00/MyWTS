@@ -56,7 +56,6 @@ def get_account_balance(access_token):
 
 # 계좌 전체 수익률, 예수금 등을 조회
 def get_account_summary(access_token):
-    """LS증권 API에서 계좌 전체 수익률, 예수금 등을 조회하는 함수"""
     headers = {
         "Content-Type": "application/json; charset=UTF-8",
         "Authorization": f"Bearer {access_token}",
@@ -72,16 +71,16 @@ def get_account_summary(access_token):
     })
     
     response = requests.post(STOCK_ACCNO_URL, headers=headers, data=body)
-    
+
     # 응답 JSON 출력
     try:
         account_summary_json = response.json()
         st.write("응답 데이터:", account_summary_json)  # Streamlit UI에서 응답 데이터 확인
 
-        if "CSPAQ12200OutBlock2" in account_summary_json:
-            return account_summary_json["CSPAQ12200OutBlock2"][0]
+        if "CSPAQ12200OutBlock1" in account_summary_json and "CSPAQ12200OutBlock2" in account_summary_json:
+            return account_summary_json["CSPAQ12200OutBlock1"], account_summary_json["CSPAQ12200OutBlock2"]
         else:
             raise Exception("계좌 요약 정보를 찾을 수 없습니다.")
-    
+
     except json.JSONDecodeError:
         raise Exception(f"JSON 디코딩 오류 발생: {response.text}")
