@@ -62,13 +62,7 @@ def get_account_summary(access_token):
     
     body = json.dumps({
         "CSPAQ12200InBlock1": {
-            "RecCnt": 1,
-            "AcntNo": "",
-            "Pwd": "",
-            "BalCreTp": "0",
-            "CmsnAppTpCode": "00000",
-            "D2balBaseQryTp": "0",
-            "UprcTpCode": "0"
+            "BalCreTp": "0"
         }
     })
     
@@ -76,6 +70,6 @@ def get_account_summary(access_token):
     account_summary_json = response.json()
     
     if "CSPAQ12200OutBlock2" in account_summary_json:
-        return account_summary_json["CSPAQ12200OutBlock2"]
+        return account_summary_json["CSPAQ12200OutBlock2"][0]
     else:
         raise Exception("계좌 요약 정보를 찾을 수 없습니다.")
