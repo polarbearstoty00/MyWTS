@@ -24,11 +24,14 @@ def get_access_token(app_key, app_secret):
 # LS증권 계좌 잔고 조회
 def get_account_balance(access_token):
     headers = {
-        "Authorization": f"Bearer {access_token}",
         "Content-Type": "application/json; charset=UTF-8",
-        "tr_cd": "t0424"
+        "Authorization": f"Bearer {access_token}",
+        "tr_cd": "t0424",
+        "tr_cont": "N",
+        "tr_cont_key": ""
     }
-    data = {
+    
+    body = json.dumps({
         "t0424InBlock": {
             "prcgb": "",
             "chegb": "",
@@ -36,7 +39,12 @@ def get_account_balance(access_token):
             "charge": "",
             "cts_expcode": ""
         }
-    }
+    })
     
-    response = requests.post(STOCK_ACCNO_URL, headers=headers, json=data)
-    return response.json()
+    response = requests.post(STOCK_ACCNO_URL, headers=headers, data=body)
+    account_json = response.json()
+    
+    if "t0424OutBlock" in account_json and "t0424OutBlock1" in account_json:
+        return account_json["t0424OutBlock"], account_json["t0424OutBlock1"]
+    else:
+        raise Exception("계좌 잔고 데이터를 찾을 수 없습니다.")
