@@ -35,19 +35,34 @@ if st.session_state["page"] == "main":
 
     # 계좌 요약 정보 출력
     try:
-        account_summary_summary, account_summary_details = get_account_summary(st.session_state["access_token"])
+        account_summary_1, account_summary_2 = get_account_summary(st.session_state["access_token"])
 
         st.write("계좌 요약 내역")
-        
-        # 계좌 요약 정보가 존재하면 표시
-        if account_summary_details:
-            st.write("### 계좌 요약 정보")
-            st.write(f"총 평가 금액: {account_summary_details[0]['BalEvalAmt']:,}원")
-            st.write(f"예수금: {account_summary_details[0]['Dps']:,}원")
-            st.write(f"총 손익률: {account_summary_details[0]['PnlRat']}%")
-    
+        st.json(account_summary_1)  # JSON 형태 그대로 출력
+
+        # account_summary_2를 DataFrame으로 변환 후 출력
+        if isinstance(account_summary_2, list):  # 리스트인지 확인
+            df_summary = pd.DataFrame(account_summary_2)  # DataFrame 변환
+
+            # ✅ 컬럼명 변경 (필요하면 수정)
+            df_summary = df_summary.rename(columns={
+                "BalEvalAmt": "총 평가 금액",
+                "Dps": "예수금",
+                "PnlRat": "총 손익률"
+            })
+            
+            # ✅ 화폐 단위 적용
+            df_summary["총 평가 금액"] = df_summary["총 평가 금액"].astype(float).apply(lambda x: f"{x:,.0f}원")
+            df_summary["예수금"] = df_summary["예수금"].astype(float).apply(lambda x: f"{x:,.0f}원")
+            df_summary["총 손익률"] = df_summary["총 손익률"].astype(float).apply(lambda x: f"{x:.2f}%")
+
+            st.dataframe(df_summary)  # DataFrame 출력
+        else:
+            st.write("계좌 요약 정보가 없습니다.")
+
     except Exception as e:
         st.warning(f"계좌 요약 조회 실패: {str(e)}")
+
     
     try:
         balance_summary, balance_details = get_account_balance(st.session_state["access_token"])
