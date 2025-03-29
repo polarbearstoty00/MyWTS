@@ -3,8 +3,8 @@ import requests
 import json
 import pandas as pd
 import traceback
-from auth_01 import get_account_balance
-from auth_01 import get_account_summary
+from login_module.authentication_LS import get_account_balance
+from login_module.authentication_LS import get_account_summary
 
 # 메인 페이지 표시 함수
 def show_main_page():
