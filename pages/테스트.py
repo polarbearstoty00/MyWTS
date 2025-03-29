@@ -3,14 +3,14 @@ import requests
 import json
 import pandas as pd
 import traceback
-from auth_01 import get_access_token
 from auth_01 import get_account_balance
 from auth_01 import get_account_summary
 
-if st.session_state["page"] == "main":
+# 메인 페이지 표시 함수
+def show_main_page():
     st.title("WTS 메인 페이지")
     st.subheader("계좌 잔고")
-
+    
     # 계좌 요약 정보 출력
     try:
         account_summary_1, account_summary_2 = get_account_summary(st.session_state["access_token"])
@@ -52,8 +52,8 @@ if st.session_state["page"] == "main":
     except Exception as e:
         st.error(f"계좌 요약 조회 실패: {str(e)}")
         st.write(traceback.format_exc())
-
-    st.divider() # 구분줄 추가
+    
+    st.divider()  # 구분줄 추가
     
     # 보유 종목 내역
     try:
@@ -66,8 +66,18 @@ if st.session_state["page"] == "main":
             df = pd.DataFrame(balance_details)
             df = df.rename(columns={"hname": "종목명"}).set_index("종목명")  # 종목명을 인덱스로 설정
             df = df[["janqty", "sunikrt", "appamt", "dtsunik", "price", "pamt", "mamt", "fee", "tax"]]  # 평가금액과 평가손익만 표시
-            df = df.rename(columns={"janqty" : "잔고수량", "sunikrt" : "수익률", "appamt": "평가금액", "dtsunik": "평가손익", "price" : "현재가",
-                                   "pamt" : "평균단가", "mamt" : "매입금액", "fee" : "수수료", "tax" : "제세금"})  # 컬럼명 변경
+            df = df.rename(columns={
+                "janqty": "잔고수량", 
+                "sunikrt": "수익률", 
+                "appamt": "평가금액", 
+                "dtsunik": "평가손익", 
+                "price": "현재가",
+                "pamt": "평균단가", 
+                "mamt": "매입금액", 
+                "fee": "수수료", 
+                "tax": "제세금"
+            })  # 컬럼명 변경
+            
             # 화폐단위 적용
             df["평가금액"] = df["평가금액"].apply(lambda x: f"{x:,.0f}")
             df["평가손익"] = df["평가손익"].apply(lambda x: f"{x:,.0f}")
@@ -76,7 +86,6 @@ if st.session_state["page"] == "main":
             df["매입금액"] = df["매입금액"].apply(lambda x: f"{x:,.0f}")
             df["수수료"] = df["수수료"].apply(lambda x: f"{x:,.0f}")
             df["제세금"] = df["제세금"].apply(lambda x: f"{x:,.0f}")
-
             st.dataframe(df)
         else:
             st.write("보유 종목이 없습니다.")
