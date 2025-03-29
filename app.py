@@ -71,11 +71,6 @@ if st.session_state["page"] == "main":
     
         # 표 형태로 표시
         st.dataframe(summary_df)
-    
-        # 상세 정보가 필요하면 더 추가
-        with st.expander("계좌 상세 정보 보기"):
-            # 전체 계좌 정보를 JSON 형태로 표시
-            st.json(account_summary_2)
         
     except Exception as e:
         st.error(f"계좌 요약 조회 실패: {str(e)}")
