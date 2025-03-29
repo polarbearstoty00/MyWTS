@@ -2,6 +2,7 @@ import streamlit as st
 import requests
 import json
 import pandas as pd
+import traceback
 from auth_01 import get_access_token
 from auth_01 import get_account_balance
 from auth_01 import get_account_summary
@@ -37,29 +38,47 @@ if st.session_state["page"] == "main":
     try:
         account_summary_1, account_summary_2 = get_account_summary(st.session_state["access_token"])
     
-        st.write("계좌 요약 내역")
+        st.write("계좌 기본 정보")
+        # 계좌 기본 정보 표시 (간단하게)
+        account_info_df = pd.DataFrame({
+            "계좌번호": [account_summary_1.get("AcntNo", "정보 없음")],
+            "계좌명": [account_summary_2.get("AcntNm", "정보 없음")],
+            "지점명": [account_summary_2.get("BrnNm", "정보 없음")]
+        })
+        st.dataframe(account_info_df)
     
-        # 응답 구조 확인
-        st.write("API 응답 구조:")
-        st.json(account_summary_1)
-    
-        # 계좌 기본 정보 표시
-        st.write("계좌 기본 정보:")
-        account_info = {
-            "계좌번호": account_summary_1.get("AcntNo", "정보 없음"),
-            "관리 지점번호": account_summary_1.get("MgmtBrnNo", "정보 없음")
+        st.write("계좌 잔고 요약")
+        # 중요 잔고 정보만 선택하여 표시
+        summary_data = {
+            "총 평가 금액": account_summary_2.get("BalEvalAmt", 0),
+            "예수금": account_summary_2.get("Dps", 0),
+            "총 손익률": account_summary_2.get("PnlRat", 0),
+            "D+2 출금가능금액": account_summary_2.get("D2PrsmptWthdwAbleAmt", 0),
+            "주문가능금액": account_summary_2.get("SeOrdAbleAmt", 0),
+            "대용금액": account_summary_2.get("SubstAmt", 0),
+            "예탁자산총액": account_summary_2.get("DpsastTotamt", 0)
         }
-        st.write(account_info)
     
-        # 계좌 잔고 정보가 있는 경우에만 표시
-        if account_summary_2 and isinstance(account_summary_2, dict) and len(account_summary_2) > 0:
-            st.write("계좌 잔고 정보:")
+        # DataFrame으로 변환
+        summary_df = pd.DataFrame([summary_data])
+    
+        # 숫자 형식 변환
+        for col in ["총 평가 금액", "예수금", "D+2 출금가능금액", "주문가능금액", "대용금액", "예탁자산총액"]:
+            summary_df[col] = summary_df[col].astype(float).apply(lambda x: f"{x:,.0f}원")
+    
+        # 손익률 형식 변환
+        summary_df["총 손익률"] = summary_df["총 손익률"].astype(float).apply(lambda x: f"{x:.2f}%")
+    
+        # 표 형태로 표시
+        st.dataframe(summary_df)
+    
+        # 상세 정보가 필요하면 더 추가
+        with st.expander("계좌 상세 정보 보기"):
+            # 전체 계좌 정보를 JSON 형태로 표시
             st.json(account_summary_2)
-        else:
-            st.warning("계좌 잔고 정보를 가져올 수 없습니다.")
+        
     except Exception as e:
         st.error(f"계좌 요약 조회 실패: {str(e)}")
-        import traceback
         st.write(traceback.format_exc())
 
     # 보유 종목 내역
