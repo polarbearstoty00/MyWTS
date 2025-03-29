@@ -53,7 +53,6 @@ def get_account_balance(access_token):
     else:
         raise Exception("계좌 잔고 데이터를 찾을 수 없습니다.")
 
-
 # 계좌 전체 수익률, 예수금 등을 조회
 def get_account_summary(access_token):
     headers = {
