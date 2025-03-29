@@ -71,9 +71,19 @@ def get_account_summary(access_token):
     })
     
     response = requests.post(STOCK_ACCNO_URL, headers=headers, data=body)
+    
+    # 응답 확인 로깅 추가
+    print("API 응답 상태 코드:", response.status_code)
+    print("API 응답 내용:", response.text)
+    
     account_summary_json = response.json()
-
+    
+    # 응답 구조 확인 후 적절히 처리
     if "CSPAQ12200OutBlock1" in account_summary_json and "CSPAQ12200OutBlock2" in account_summary_json:
         return account_summary_json["CSPAQ12200OutBlock1"], account_summary_json["CSPAQ12200OutBlock2"]
+    elif "CSPAQ12200OutBlock1" in account_summary_json:
+        # OutBlock2가 없는 경우 빈 딕셔너리 반환
+        return account_summary_json["CSPAQ12200OutBlock1"], {}
     else:
-        raise Exception("계좌 요약 정보를 찾을 수 없습니다.")
+        # 응답 구조 자체를 반환하여 확인
+        return account_summary_json, {}
