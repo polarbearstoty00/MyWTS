@@ -60,7 +60,7 @@ if st.session_state["page"] == "main":
         }
     
         # DataFrame으로 변환
-        summary_df = pd.DataFrame([summary_data], hide_index=True))
+        summary_df = pd.DataFrame([summary_data], hide_index=True)
     
         # 숫자 형식 변환
         for col in ["총 평가 금액", "예수금", "D+2 출금가능금액", "주문가능금액", "대용금액", "예탁자산총액"]:
