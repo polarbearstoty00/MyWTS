@@ -3,7 +3,7 @@ import requests
 import json
 import pandas as pd
 import traceback
-from auth_01 import get_access_token
+from login_module.authentication_LS import get_access_token
 from main_page import show_main_page
 
 # 페이지 상태 초기화
