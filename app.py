@@ -45,7 +45,7 @@ if st.session_state["page"] == "main":
             "계좌명": [account_summary_2.get("AcntNm", "정보 없음")],
             "지점명": [account_summary_2.get("BrnNm", "정보 없음")]
         })
-        st.dataframe(account_info_df)
+        st.dataframe(account_info_df, hide_index=Ture)
     
         st.write("계좌 잔고 요약")
         # 중요 잔고 정보만 선택하여 표시
