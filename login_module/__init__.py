@@ -1,2 +1,3 @@
+from .authentication_LS import get_access_token
 from .authentication_LS import get_account_balance
 from .authentication_LS import get_account_summary
