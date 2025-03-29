@@ -60,7 +60,7 @@ if st.session_state["page"] == "main":
         }
     
         # DataFrame으로 변환
-        summary_df = pd.DataFrame([summary_data])
+        summary_df = pd.DataFrame([summary_data], hide_index=True))
     
         # 숫자 형식 변환
         for col in ["총 평가 금액", "예수금", "D+2 출금가능금액", "주문가능금액", "대용금액", "예탁자산총액"]:
@@ -70,7 +70,7 @@ if st.session_state["page"] == "main":
         summary_df["총 손익률"] = summary_df["총 손익률"].astype(float).apply(lambda x: f"{x:.2f}%")
     
         # 표 형태로 표시
-        st.dataframe(summary_df)
+        st.dataframe(summary_df, hide_index=True))
         
     except Exception as e:
         st.error(f"계좌 요약 조회 실패: {str(e)}")
