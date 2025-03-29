@@ -76,6 +76,8 @@ if st.session_state["page"] == "main":
         st.error(f"계좌 요약 조회 실패: {str(e)}")
         st.write(traceback.format_exc())
 
+    st.divider() # 구분줄 추가
+    
     # 보유 종목 내역
     try:
         balance_summary, balance_details = get_account_balance(st.session_state["access_token"])
