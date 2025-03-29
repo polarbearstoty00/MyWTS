@@ -36,34 +36,60 @@ if st.session_state["page"] == "main":
     # 계좌 요약 정보 출력
     try:
         account_summary_1, account_summary_2 = get_account_summary(st.session_state["access_token"])
-
         st.write("계좌 요약 내역")
-        st.json(account_summary_1)  # JSON 형태 그대로 출력
-
-        # account_summary_2를 DataFrame으로 변환 후 출력
-        if isinstance(account_summary_2, list):  # 리스트인지 확인
-            df_summary = pd.DataFrame(account_summary_2)  # DataFrame 변환
-
-            # ✅ 컬럼명 변경 (필요하면 수정)
-            df_summary = df_summary.rename(columns={
+    
+        # 먼저 데이터 구조 확인용 출력 (디버깅용)
+        st.write("account_summary_1 구조:")
+        st.write(type(account_summary_1))
+        st.json(account_summary_1)
+    
+        st.write("account_summary_2 구조:")
+        st.write(type(account_summary_2))
+        st.json(account_summary_2)
+    
+        # account_summary_2 처리
+        if isinstance(account_summary_2, dict):  # 딕셔너리인 경우
+            # 딕셔너리를 리스트로 변환하여 DataFrame 생성
+            df_summary = pd.DataFrame([account_summary_2])
+        elif isinstance(account_summary_2, list) and account_summary_2:  # 리스트이고 비어있지 않은 경우
+            df_summary = pd.DataFrame(account_summary_2)
+        else:
+            st.warning("계좌 요약 정보의 형식이 예상과 다릅니다.")
+            st.write(account_summary_2)
+            df_summary = None
+    
+        # DataFrame이 생성된 경우에만 처리
+        if df_summary is not None:
+            # 컬럼이 존재하는지 확인 후 컬럼명 변경
+            columns_to_rename = {
                 "BalEvalAmt": "총 평가 금액",
                 "Dps": "예수금",
                 "PnlRat": "총 손익률"
-            })
-            
-            # ✅ 화폐 단위 적용
-            df_summary["총 평가 금액"] = df_summary["총 평가 금액"].astype(float).apply(lambda x: f"{x:,.0f}원")
-            df_summary["예수금"] = df_summary["예수금"].astype(float).apply(lambda x: f"{x:,.0f}원")
-            df_summary["총 손익률"] = df_summary["총 손익률"].astype(float).apply(lambda x: f"{x:.2f}%")
-
-            st.dataframe(df_summary)  # DataFrame 출력
+            }
+        
+            # 실제 존재하는 컬럼만 변경
+            rename_dict = {k: v for k, v in columns_to_rename.items() if k in df_summary.columns}
+            if rename_dict:
+                df_summary = df_summary.rename(columns=rename_dict)
+        
+            # 컬럼이 존재하는지 확인 후 형식 변환
+            if "총 평가 금액" in df_summary.columns:
+                df_summary["총 평가 금액"] = df_summary["총 평가 금액"].astype(float).apply(lambda x: f"{x:,.0f}원")
+            if "예수금" in df_summary.columns:
+                df_summary["예수금"] = df_summary["예수금"].astype(float).apply(lambda x: f"{x:,.0f}원")
+            if "총 손익률" in df_summary.columns:
+                df_summary["총 손익률"] = df_summary["총 손익률"].astype(float).apply(lambda x: f"{x:.2f}%")
+        
+            st.dataframe(df_summary)
         else:
-            st.write("계좌 요약 정보가 없습니다.")
-
+            st.write("계좌 요약 정보가 없거나 처리할 수 없는 형식입니다.")
     except Exception as e:
         st.warning(f"계좌 요약 조회 실패: {str(e)}")
+        # 에러 상세 정보 출력
+        import traceback
+        st.write(traceback.format_exc())
 
-    
+    # 보유 종목 내역
     try:
         balance_summary, balance_details = get_account_balance(st.session_state["access_token"])
     
