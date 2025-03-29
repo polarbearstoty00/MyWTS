@@ -1,9 +1,9 @@
-https://blog.naver.com/zacra/223530451234
+# https://blog.naver.com/zacra/223530451234
 
-#투자할 종목! 예시.. 2개 종목 투자.
+# 투자할 종목! 예시.. 2개 종목 투자.
 TargetStockList = ['QQQM','SCHD']
 
-#투자할 종목! 예시.. 2개 종목 투자.
+# 투자할 종목! 예시.. 2개 종목 투자.
 TargetStockList = ['305540','329750']
 # 305540 TIGER 2차전지테마
 # 329750 TIGER 미국달러단기채권액티브
